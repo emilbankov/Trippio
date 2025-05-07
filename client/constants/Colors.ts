@@ -3,6 +3,7 @@ const tintColorDark = '#fff';
 
 const Colors = {
   primary: '#28104E', // Dark Purple
+  softPurple: "#4B2A6D",
   secondary: '#6237A0', // Medium Purple
   lightPurple: '#9754CB', // Light Purple
   accent: '#DEACF5', // Light Background

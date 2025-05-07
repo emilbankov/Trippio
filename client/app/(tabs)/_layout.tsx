@@ -67,20 +67,6 @@ export default function TabLayout() {
                             options={{
                                 header: () => <Header title="Trippio" onProfilePress={handleProfilePress} />,
                                 tabBarIcon: ({ color }) => <FontAwesome name="plane" size={20} color={color} />,
-                                headerRight: () => (
-                                    <Link href="/modal" asChild>
-                                        <Pressable>
-                                            {({ pressed }) => (
-                                                <FontAwesome
-                                                    name="info-circle"
-                                                    size={25}
-                                                    color={Colors.text}
-                                                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                                                />
-                                            )}
-                                        </Pressable>
-                                    </Link>
-                                ),
                             }}
                         />
                         <Tabs.Screen
