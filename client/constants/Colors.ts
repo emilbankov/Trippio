@@ -1,7 +1,12 @@
 const tintColorLight = '#2f95dc';
 const tintColorDark = '#fff';
 
-export default {
+const Colors = {
+  primary: '#28104E', // Dark Purple
+  secondary: '#6237A0', // Medium Purple
+  lightPurple: '#9754CB', // Light Purple
+  accent: '#DEACF5', // Light Background
+  text: '#FFFFFF', // White text for contrast
   light: {
     text: '#000',
     background: '#fff',
@@ -17,3 +22,5 @@ export default {
     tabIconSelected: tintColorDark,
   },
 };
+
+export default Colors;
