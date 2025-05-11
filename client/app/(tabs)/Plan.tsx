@@ -4,6 +4,7 @@ import { View, Text, TextInput, StyleSheet, Keyboard, TouchableWithoutFeedback, 
 import { useFocusEffect } from '@react-navigation/native';
 import Colors from '@/constants/Colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const questions = [
   { value: "Where do you want to go?", placeholder: "e.g., Barcelona", type: "text" },
@@ -31,18 +32,15 @@ const Plan: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<string[]>(Array(questions.length).fill(''));
   const [datePickerVisible, setDatePickerVisible] = useState(false);
-  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
-  const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isPreview, setIsPreview] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
       setCurrentQuestionIndex(0);
-      return () => {
-        setAnswers(Array(questions.length).fill(''));
-        setSelectedStartDate(null);
-        setSelectedEndDate(null);
-      };
+      setAnswers(Array(questions.length).fill(''));
+      setSelectedDate(null);
+      setDatePickerVisible(false);
     }, [])
   );
 
@@ -64,17 +62,14 @@ const Plan: React.FC = () => {
   const showDatePicker = () => setDatePickerVisible(true);
   const hideDatePicker = () => setDatePickerVisible(false);
 
-  const handleConfirm = (event: any, date: Date | undefined) => {
-    if (date) {
-      const isoDate = date.toISOString().split('T')[0];
-      if (currentQuestionIndex === 1) {
-        setSelectedStartDate(date);
-        setSelectedEndDate(date);
-        handleInputChange(isoDate);
-      } else if (currentQuestionIndex === 2) {
-        setSelectedEndDate(date);
-        handleInputChange(isoDate);
-      }
+  const handleConfirm = (date: Date) => {
+    const isoDate = date.toISOString().split('T')[0];
+    if (currentQuestionIndex === 1) {
+      setSelectedDate(date);
+      handleInputChange(isoDate);
+    } else if (currentQuestionIndex === 2) {
+      setSelectedDate(date);
+      handleInputChange(isoDate);
     }
     hideDatePicker();
   };
@@ -83,9 +78,9 @@ const Plan: React.FC = () => {
     const currentQuestion = questions[currentQuestionIndex];
     const value = answers[currentQuestionIndex];
 
-    switch (currentQuestion.type) {
-      case 'text':
-        return (
+    return (
+      <View style={styles.inputContainer}>
+        {currentQuestion.type === 'text' && (
           <TextInput
             style={styles.input}
             onChangeText={handleInputChange}
@@ -93,9 +88,8 @@ const Plan: React.FC = () => {
             placeholder={currentQuestion.placeholder}
             placeholderTextColor="#aaa"
           />
-        );
-      case 'textarea':
-        return (
+        )}
+        {currentQuestion.type === 'textarea' && (
           <TextInput
             style={styles.textarea}
             onChangeText={handleInputChange}
@@ -105,17 +99,15 @@ const Plan: React.FC = () => {
             multiline
             numberOfLines={4}
           />
-        );
-      case 'date':
-        return (
+        )}
+        {currentQuestion.type === 'date' && (
           <TouchableOpacity onPress={showDatePicker} style={styles.dateInput}>
             <Text style={{ color: value ? Colors.text : '#aaa' }}>
               {value || currentQuestion.placeholder}
             </Text>
           </TouchableOpacity>
-        );
-      case 'radio':
-        return (
+        )}
+        {currentQuestion.type === 'radio' && (
           <View style={styles.radioContainer}>
             {['Yes', 'No'].map((option) => (
               <TouchableOpacity
@@ -137,10 +129,9 @@ const Plan: React.FC = () => {
               </TouchableOpacity>
             ))}
           </View>
-        );
-      default:
-        return null;
-    }
+        )}
+      </View>
+    );
   };
 
   return (
@@ -161,8 +152,7 @@ const Plan: React.FC = () => {
                 setIsPreview(false);
                 setCurrentQuestionIndex(0);
                 setAnswers(Array(questions.length).fill(''));
-                setSelectedStartDate(null);
-                setSelectedEndDate(null);
+                setSelectedDate(null);
               }}
             >
               <Text style={styles.backButtonText}>Back to questions</Text>
@@ -181,20 +171,15 @@ const Plan: React.FC = () => {
                 <Text style={styles.buttonText}>→</Text>
               </TouchableOpacity>
             </View>
-            {datePickerVisible && (
-              <DateTimePicker
-                value={
-                  currentQuestionIndex === 1
-                    ? selectedStartDate || new Date()
-                    : selectedEndDate || new Date()
-                }
-                mode="date"
-                display="default"
-                onChange={handleConfirm}
-              />
-            )}
           </>
         )}
+        <DateTimePickerModal
+          isVisible={datePickerVisible}
+          mode="date"
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+          date={selectedDate || new Date()}
+        />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -337,7 +322,10 @@ const styles = StyleSheet.create({
   backButtonText: {
     fontSize: 18,
     color: Colors.text
-  }
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
 });
 
 export default Plan;
