@@ -5,6 +5,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import Colors from '@/constants/Colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import Svg, { Ellipse } from 'react-native-svg';
 
 const questions = [
   { value: "Where do you want to go?", placeholder: "e.g., Barcelona", type: "text" },
@@ -23,8 +24,21 @@ interface SpeechBubbleProps {
 }
 
 const SpeechBubble: React.FC<SpeechBubbleProps> = ({ text }) => (
-  <View style={styles.speechBubble}>
-    <Text style={styles.bubbleText}>{text}</Text>
+  <View style={styles.speechBubbleContainer}>
+    <Svg width={220} height={100}>
+      <Ellipse
+        cx="110"
+        cy="50"
+        rx="110"
+        ry="50"
+        fill="white"
+        stroke="black"
+        strokeWidth="2"
+      />
+    </Svg>
+    <View style={styles.bubbleTextContainer}>
+      <Text style={styles.bubbleText}>{text}</Text>
+    </View>
   </View>
 );
 
@@ -160,11 +174,29 @@ const Plan: React.FC = () => {
           </View>
         ) : (
           <>
-            <Image
-              source={require('../../assets/images/bot-speech.png')}
-              style={styles.botImage}
-            />
-            <SpeechBubble text={questions[currentQuestionIndex].value} />
+            <View style={styles.topRow}>
+              <Image
+                source={require('../../assets/images/bot.png')}
+                style={styles.botImage}
+                resizeMode="contain"
+              />
+              <View style={styles.ellipseContainer}>
+                <Svg width={220} height={100} viewBox="0 0 220 100">
+                  <Ellipse
+                    cx={110}
+                    cy={50}
+                    rx={110}
+                    ry={50}
+                    fill="white"
+                    stroke="black"
+                    strokeWidth="2"
+                  />
+                </Svg>
+                <View style={styles.ellipseTextContainer}>
+                  <Text style={styles.ellipseText}>{questions[currentQuestionIndex].value}</Text>
+                </View>
+              </View>
+            </View>
             <View style={styles.box}>
               {renderInputField()}
               <TouchableOpacity style={styles.nextButton} onPress={handleNextQuestion}>
@@ -237,30 +269,51 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 30,
     borderRadius: 10,
-    marginVertical: 10,
   },
   botImage: {
-    position: 'absolute',
-    top: "17.9%",
-    left: '10%',
-    transform: [{ translateX: -50 }],
-    width: 400,
-    height: 200,
+    width: 190,
+    height: 190,
+    marginBottom: -25,
     zIndex: 1,
   },
-  speechBubble: {
+  ellipseContainer: {
+    marginLeft: -32,
+    width: 220,
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  ellipseTextContainer: {
     position: 'absolute',
-    top: "27%",
+    width: 220,
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  ellipseText: {
+    textAlign: 'center',
+    color: 'black',
+    fontSize: 16,
+    width: '80%',
+  },
+  speechBubbleContainer: {
+    position: 'absolute',
+    top: "22%",
     left: '45%',
-    borderRadius: 10,
-    padding: 10,
-    maxWidth: '55%',
     zIndex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bubbleTextContainer: {
+    position: 'absolute',
+    width: 200,
+    padding: 10,
   },
   bubbleText: {
-    color: "black",
+    textAlign: 'center',
+    color: 'black',
     fontSize: 16,
-    textAlign: "center",
   },
   radioContainer: {
     flexDirection: 'row',
@@ -325,6 +378,10 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginBottom: 20,
+  },
+  topRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 
