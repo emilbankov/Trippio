@@ -73,7 +73,7 @@ export default function TabLayout() {
                             name="MyTrips"
                             options={{
                                 header: () => <Header title="Trippio" onProfilePress={handleProfilePress} />,
-                                tabBarIcon: ({ color }) => <FontAwesome name="suitcase" size={20} color={color} />,
+                                tabBarIcon: ({ color }) => <FontAwesome name="map" size={20} color={color} />,
                             }}
                         />
                         <Tabs.Screen
