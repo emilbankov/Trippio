@@ -1,10 +1,18 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Platform, StatusBar } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Colors from '@/constants/Colors';
 
 const Header: React.FC<{ title: string; onProfilePress: () => void }> = ({ title, onProfilePress }) => {
+    const insets = useSafeAreaInsets();
+    
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <View style={[styles.container, { paddingTop: insets.top }]}>
+            <StatusBar 
+                barStyle="light-content" 
+                backgroundColor={Colors.primary}
+                translucent={true}
+            />
             <View style={styles.header}>
                 <Text style={styles.title}>{title}</Text>
                 <TouchableOpacity onPress={onProfilePress}>
@@ -14,16 +22,16 @@ const Header: React.FC<{ title: string; onProfilePress: () => void }> = ({ title
                     />
                 </TouchableOpacity>
             </View>
-        </SafeAreaView>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    safeArea: {
+    container: {
         backgroundColor: Colors.primary,
     },
     header: {
-        height: "auto",
+        height: 56,
         backgroundColor: Colors.primary,
         flexDirection: 'row',
         justifyContent: 'space-between',
