@@ -1,22 +1,49 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useRef } from 'react';
+import { View, Text, StyleSheet, Pressable, Animated } from 'react-native';
 import Colors from '@/constants/Colors';
-import { PlanSelectionProps } from '../types';
-import { planOptions } from '../constants';
+import { planOptions } from '../../../constants/constants';
 
 const PlanSelection: React.FC<PlanSelectionProps> = ({ onSelectPlan }) => (
   <View style={styles.planSelectionContainer}>
     <Text style={styles.planSelectionTitle}>Choose your planning style</Text>
-    {planOptions.map((plan, index) => (
-      <TouchableOpacity
-        key={index}
-        style={styles.planOption}
-        onPress={() => onSelectPlan(plan.title)}
-      >
-        <Text style={styles.planOptionTitle}>{plan.title}</Text>
-        <Text style={styles.planOptionDescription}>{plan.description}</Text>
-      </TouchableOpacity>
-    ))}
+    {planOptions.map((plan, index) => {
+      const animatedScale = useRef(new Animated.Value(1)).current;
+
+      const handlePressIn = () => {
+        Animated.spring(animatedScale, {
+          toValue: 0.98,
+          useNativeDriver: true,
+        }).start();
+      };
+
+      const handlePressOut = () => {
+        Animated.spring(animatedScale, {
+          toValue: 1,
+          useNativeDriver: true,
+        }).start();
+      };
+
+      return (
+        <Pressable
+          key={index}
+          onPress={() => onSelectPlan(plan.title)}
+          onPressIn={handlePressIn}
+          onPressOut={handlePressOut}
+          style={styles.planOptionWrapper}
+        >
+          {({ pressed }) => (
+            <Animated.View
+              style={{
+                transform: [{ scale: animatedScale }],
+                ...styles.planOptionAnimatedContent,
+              }}
+            >
+              <Text style={styles.planOptionTitle}>{plan.title}</Text>
+            </Animated.View>
+          )}
+        </Pressable>
+      );
+    })}
   </View>
 );
 
@@ -33,22 +60,25 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 30,
   },
-  planOption: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 15,
+  planOptionWrapper: {
     marginBottom: 15,
+    borderRadius: 15,
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
   },
+  planOptionAnimatedContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 15,
+  },
   planOptionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     color: Colors.primary,
-    marginBottom: 5,
+    textAlign: "center",
   },
   planOptionDescription: {
     fontSize: 16,
