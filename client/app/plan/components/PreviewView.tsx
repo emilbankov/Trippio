@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Colors from '@/constants/Colors';
-import { PreviewViewProps } from '../types';
-import { questions } from '../constants';
+import { questions } from '../../../constants/constants';
 
 const PreviewView: React.FC<PreviewViewProps> = ({ selectedPlan, answers, onBack }) => (
   <View style={styles.previewContainer}>

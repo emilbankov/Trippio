@@ -3,8 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'reac
 import Svg, { Ellipse } from 'react-native-svg';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Colors from '@/constants/Colors';
-import { QuestionsViewProps } from '../types';
-import { questions } from '../constants';
+import { questions } from '../../../constants/constants';
 
 const QuestionsView: React.FC<QuestionsViewProps> = ({
   currentQuestionIndex,
