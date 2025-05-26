@@ -10,6 +10,9 @@ import Header from '../components/Header';
 
 const { width: screenWidth } = Dimensions.get('window');
 
+// Define a type for the language
+type Language = 'EN' | 'BG';
+
 function TabBarIcon(props: {
     name: React.ComponentProps<typeof FontAwesome>['name'];
     color: string;
@@ -20,6 +23,12 @@ function TabBarIcon(props: {
 export default function TabLayout() {
     const [popupVisible, setPopupVisible] = useState(false);
     const [fadeAnim] = useState(new Animated.Value(0)); // Initial opacity value
+    const [selectedLanguage, setSelectedLanguage] = useState<Language>('EN'); // Add state for selected language with type
+
+    const handlePressLanguage = (language: Language) => {
+        setSelectedLanguage(language);
+        // You would add actual language change logic here later
+    };
 
     const handleProfilePress = () => {
         if (popupVisible) {
@@ -50,78 +59,88 @@ export default function TabLayout() {
 
     return (
         <View style={{ flex: 1 }}>
-            <TouchableWithoutFeedback onPress={handleClosePopup}>
-                <View style={{ flex: 1 }}>
-                    <Tabs
-                        screenOptions={{
-                            tabBarActiveTintColor: Colors.secondary,
-                            tabBarInactiveTintColor: Colors.text,
-                            headerShown: true,
-                            tabBarStyle: {
-                                backgroundColor: Colors.primary,
-                                borderTopWidth: 0.3,
-                                borderTopColor: Colors.lightPurple
-                            },
-                        }}>
-                        <Tabs.Screen
-                            name="Plan"
-                            options={{
-                                header: () => <Header title="Trippio" onProfilePress={handleProfilePress} />,
-                                tabBarIcon: ({ color }) => <FontAwesome name="plane" size={20} color={color} />,
-                            }}
-                        />
-                        <Tabs.Screen
-                            name="MyTrips"
-                            options={{
-                                header: () => <Header title="Trippio" onProfilePress={handleProfilePress} />,
-                                // tabBarIcon: ({ color }) => <FontAwesome name="map" size={20} color={color} />,
-                                tabBarIcon: ({ color }) => <FontAwesome5 name="map-marked-alt" size={20} color={color} />,
-                            }}
-                        />
-                        <Tabs.Screen
-                            name="Profile"
-                            options={{
-                                header: () => <Header title="Trippio" onProfilePress={handleProfilePress} />,
-                                tabBarIcon: ({ color }) => <FontAwesome name="user" size={20} color={color} />,
-                            }}
-                        />
-                    </Tabs>
+            <View style={{ flex: 1 }}>
+                <Tabs
+                    screenOptions={{
+                        tabBarActiveTintColor: Colors.secondary,
+                        tabBarInactiveTintColor: Colors.text,
+                        headerShown: true,
+                        tabBarStyle: {
+                            backgroundColor: Colors.primary,
+                            borderTopWidth: 0.3,
+                            borderTopColor: Colors.lightPurple
+                        },
+                    }}>
+                    <Tabs.Screen
+                        name="Plan"
+                        options={{
+                            header: () => <Header title="Trippio" onProfilePress={handleProfilePress} />,
+                            tabBarIcon: ({ color }) => <FontAwesome name="plane" size={20} color={color} />,
+                        }}
+                    />
+                    <Tabs.Screen
+                        name="MyTrips"
+                        options={{
+                            header: () => <Header title="Trippio" onProfilePress={handleProfilePress} />,
+                            tabBarIcon: ({ color }) => <FontAwesome5 name="map-marked-alt" size={20} color={color} />,
+                        }}
+                    />
+                    <Tabs.Screen
+                        name="Profile"
+                        options={{
+                            header: () => <Header title="Trippio" onProfilePress={handleProfilePress} />,
+                            tabBarIcon: ({ color }) => <FontAwesome name="user" size={20} color={color} />,
+                        }}
+                    />
+                </Tabs>
 
-                    {popupVisible && (
-                        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1000 }}>
-                            <TouchableWithoutFeedback onPress={handleClosePopup}>
-                                <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} />
-                            </TouchableWithoutFeedback>
-                            <Animated.View style={[styles.popup, { opacity: fadeAnim, width: screenWidth - 31, zIndex: 1001 }]}>
-                                <View style={styles.userInfo}>
-                                    <Image
-                                        source={require('../../assets/images/no-image.jpg')}
-                                        style={styles.popupProfilePicture}
-                                    />
-                                    <View style={styles.userDetails}>
-                                        <Text style={styles.userName}>Jon Doe</Text>
-                                        <Text style={styles.userEmail}>john.doe@example.com</Text>
+                {/* Conditional rendering for the full-screen overlay and popup */}
+                {popupVisible && (
+                    <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1000 }}>
+                        {/* Touchable overlay for closing the popup */}
+                        <TouchableWithoutFeedback onPress={handleClosePopup}>
+                            <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)' }} />
+                        </TouchableWithoutFeedback>
+
+                        {/* The popup content */}
+                        <Animated.View style={[styles.popup, { opacity: fadeAnim, width: screenWidth - 31, zIndex: 1001 }]}>
+                            <View style={styles.userInfo}>
+                                <Image
+                                    source={require('../../assets/images/no-image.jpg')}
+                                    style={styles.popupProfilePicture}
+                                />
+                                <View style={styles.userDetails}>
+                                    <Text style={styles.userName}>Jon Doe</Text>
+                                    <Text style={styles.userEmail}>john.doe@example.com</Text>
+                                </View>
+                            </View>
+                            <View style={styles.languageSwitcherContainer}>
+                                <Pressable onPress={() => handlePressLanguage('EN')}>
+                                    <Text style={[styles.languageOption, selectedLanguage === 'EN' && styles.selectedLanguage]}>EN</Text>
+                                </Pressable>
+                                <Text style={styles.languageSeparator}> | </Text>
+                                <Pressable onPress={() => handlePressLanguage('BG')}>
+                                    <Text style={[styles.languageOption, selectedLanguage === 'BG' && styles.selectedLanguage]}>BG</Text>
+                                </Pressable>
+                            </View>
+                            <View style={styles.touchableOpacity}>
+                                <TouchableOpacity onPress={() => { handleClosePopup(); }}>
+                                    <Text style={styles.popupButton}>Profile</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => { handleClosePopup(); }}>
+                                    <Text style={styles.popupButton}>Settings</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.logoutBox} onPress={() => { handleClosePopup(); }}>
+                                    <View style={styles.logoutContent}>
+                                        <FontAwesome name="sign-out" size={18} color={"red"} />
+                                        <Text style={styles.logoutButton}>Log out</Text>
                                     </View>
-                                </View>
-                                <View style={styles.touchableOpacity}>
-                                    <TouchableOpacity onPress={() => { handleClosePopup(); }}>
-                                        <Text style={styles.popupButton}>Profile</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => { handleClosePopup(); }}>
-                                        <Text style={styles.popupButton}>Settings</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.logoutBox} onPress={() => { handleClosePopup(); }}>
-                                        <View style={styles.logoutContent}>
-                                            <FontAwesome name="sign-out" size={18} color={"red"} />
-                                            <Text style={styles.logoutButton}>Log out</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                            </Animated.View>
-                        </View>
-                    )}
-                </View>
-            </TouchableWithoutFeedback>
+                                </TouchableOpacity>
+                            </View>
+                        </Animated.View>
+                    </View>
+                )}
+            </View>
         </View>
     );
 }
@@ -191,5 +210,29 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginLeft: 4,
         color: "red",
+    },
+    languageSwitcherContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 15,
+    },
+    languageOption: {
+        fontSize: 16,
+        color: Colors.text,
+    },
+    selectedLanguage: {
+        color: Colors.secondary,
+        fontWeight: 'bold',
+        shadowColor: Colors.secondary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.6,
+        shadowRadius: 5,
+        elevation: 8,
+    },
+    languageSeparator: {
+        fontSize: 16,
+        color: Colors.text,
+        marginHorizontal: 5,
     },
 });

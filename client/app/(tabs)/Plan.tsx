@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Colors from '@/constants/Colors';
-import { questions } from '../plan/constants';
+import { questions } from '../../constants/constants';
 import InitialView from '../plan/components/InitialView';
 import PlanSelection from '../plan/components/PlanSelection';
 import QuestionsView from '../plan/components/QuestionsView';
