@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Link, Tabs } from 'expo-router';
 import { Pressable, TouchableWithoutFeedback, View, Animated, Image, Text, TouchableOpacity } from 'react-native';
 
@@ -73,7 +74,8 @@ export default function TabLayout() {
                             name="MyTrips"
                             options={{
                                 header: () => <Header title="Trippio" onProfilePress={handleProfilePress} />,
-                                tabBarIcon: ({ color }) => <FontAwesome name="map" size={20} color={color} />,
+                                // tabBarIcon: ({ color }) => <FontAwesome name="map" size={20} color={color} />,
+                                tabBarIcon: ({ color }) => <FontAwesome5 name="map-marked-alt" size={20} color={color} />,
                             }}
                         />
                         <Tabs.Screen
