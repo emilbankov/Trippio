@@ -1,27 +1,27 @@
-export interface Question {
+interface Question {
   value: string;
   placeholder: string;
   type: 'text' | 'date' | 'textarea' | 'radio';
 }
 
-export interface PlanOption {
+interface PlanOption {
   title: string;
   description: string;
 }
 
-export interface SpeechBubbleProps {
+interface SpeechBubbleProps {
   text: string;
 }
 
-export interface InitialViewProps {
+interface InitialViewProps {
   onStartPlanning: () => void;
 }
 
-export interface PlanSelectionProps {
+interface PlanSelectionProps {
   onSelectPlan: (plan: string) => void;
 }
 
-export interface QuestionsViewProps {
+interface QuestionsViewProps {
   currentQuestionIndex: number;
   answers: string[];
   onInputChange: (text: string) => void;
@@ -33,7 +33,7 @@ export interface QuestionsViewProps {
   selectedDate: Date | null;
 }
 
-export interface PreviewViewProps {
+interface PreviewViewProps {
   selectedPlan: string;
   answers: string[];
   onBack: () => void;

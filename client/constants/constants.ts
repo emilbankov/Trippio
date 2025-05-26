@@ -1,5 +1,3 @@
-import { Question } from './types';
-
 export const questions: Question[] = [
   { value: "Where do you want to go?", placeholder: "e.g., Barcelona", type: "text" },
   { value: "When are you planning your trip?", placeholder: "Select start date", type: "date" },
