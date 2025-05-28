@@ -1,5 +1,6 @@
 export const questions: Question[] = [
-  { value: "Where do you want to go?", placeholder: "e.g., Barcelona", type: "text" },
+  { value: "Which country do you want to visit?", placeholder: "e.g., Spain", type: "text" },
+  { value: "Which city in the selected country?", placeholder: "e.g., Barcelona", type: "text" },
   { value: "When are you planning your trip?", placeholder: "Select start date", type: "date" },
   { value: "When is your trip ending?", placeholder: "Select end date", type: "date" },
   { value: "What's your budget?", placeholder: "e.g., $1500", type: "text" },
